@@ -2,10 +2,10 @@
     import { ItemType, itemsInfo, ItemId } from './json/itemsinfo'
     import { getPng } from './getPng.js'
 
-    export let item;
-    export let defaultIcon;
-    export let defaultName;
-    export let defaultStyle;
+    let item;
+    let defaultIcon;
+    let defaultName;
+    let defaultStyle;
 
     let iconInfo = itemsInfo[item.ItemId];
         
@@ -18,10 +18,6 @@
             return Bool(item.Data.split("_")[2]) ? "clothesM" : "clothesF"
         }
         return "";
-    }
-    return {
-        getPng,
-        defaultStyle
     }
 </script>
 
