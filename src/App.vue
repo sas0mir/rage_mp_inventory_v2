@@ -9,7 +9,7 @@
   import wMaxHP from './wMaxHP.js';
   import rangeslider from './components/rangeslider';
   import slot from './slot.vue';
-  import { useMotion } from '@vueuse/motion/index';
+  import { useMotion } from '@vueuse/motion';
   import { getPng } from './getPng';
   import inventoryweapons from './json/inventoryweapons';
   import './assets/fonts/style.css';
@@ -1743,7 +1743,7 @@
   const onOpenBattlePass = () => {
       executeClient("client.battlepass.open");
   }
-  
+
 </script>
 
 <template>
@@ -1752,7 +1752,7 @@
         class="dragonDrop"
         :style="{ width: `${selectItem.width}px`, height: `${selectItem.height}px`, top: `${$coords.y - selectItem.offsetInElementY}px`, left: `${$coords.x - selectItem.offsetInElementX}px`}"
       >
-          <Slot :item="selectItem" :iconInfo="window.getItem(selectItem.ItemId)" >
+          <Slot :item="selectItem" :iconInfo="window.getItem(selectItem.ItemId)"></Slot>
       </div>
   </div>
   <!--Информация о предмете-->
@@ -1762,31 +1762,31 @@
           <div v-if="wMaxHP[infoItem.ItemId] && infoItem.Data && infoItem.Data.split('_') && infoItem.Data.split('_').length > 1 && infoItem.Data.split('_')[1] != undefined" class="type" :style="{color: '#FFA07A'}">
              {{`| Состояние: ${weaponCondition(infoItem.Data.split('_')[1], wMaxHP[infoItem.ItemId])}%`}}
           </div>
-          <div v-if="OtherInfo.Id === otherType.Tent && infoItem.Price" class="type" style="{color: '#FFA07A'}">
+          <div v-if="OtherInfo.Id === otherType.Tent && infoItem.Price" class="type" :style="{color: '#FFA07A'}">
             {{`Цена за 1 ед. $ ${format("money", infoItem.Price)}`}}
           </div>
       </div>
   </div>
   <div v-if="selectItem.use === stageItem.useItem && selectItem.tent && !OtherInfo.IsMyTent" ref="boxPopup" class="box-stack" 
       :style="{top: `${fixOutToY($coords.y, boxPopup.value)}px`, left: `${fixOutToX($coords.x, boxPopup.value)}px`}"
-      @mouseenter={e => useInventoryArea = true} @mouseleave={e => useInventoryArea = false}>
+      @mouseenter="e => useInventoryArea = true" @mouseleave="e => useInventoryArea = false">
       <div class="box-text">
           <span :class="`icon ${selectItem.info.Icon}`">{{getName(selectItem, selectItem.arrayName)}}</span>
       </div>
       <div class="box-number">
-          {{translateText('player1', 'Кол-во')}}: <input type="number" ref="StackValue" class="box-number-input" @input={event => handleInputStackChange(event.target.value)} @onBlur={onBlurStack} />
+          {{translateText('player1', 'Кол-во')}}: <input type="number" ref="StackValue" class="box-number-input" @input="event => handleInputStackChange(event.target.value)" @onBlur="onBlurStack" />
       </div>
       <div v-if="selectItem.Count > 1" class="slider box-slider">
           <input type="range" id="stack" />
       </div>
       <div class="btn-slap" @click={onBuy}>Купить</div>
       <div class="box-cancel">
-        <span class='icon inv-close' @click={e => selectItem = defaulSelectItem}></span>
+        <span class='icon inv-close' @click="e => selectItem = defaulSelectItem"></span>
       </div>
   </div>
   <div v-else-if="selectItem.use === stageItem.useItem && ItemStack === -1" ref="boxPopup" class="box-use" 
     :style="{top: `${fixOutToY($coords.y, boxPopup.value)}px`, left: `${fixOutToX($coords.x, boxPopup.value)}px`}"
-    @mouseenter={e => useInventoryArea = true} @mouseleave={e => useInventoryArea = false}>
+    @mouseenter="e => useInventoryArea = true" @mouseleave="e => useInventoryArea = false">
     
     <div class="box-item-weapon">
         <div class="bg-info">
@@ -1805,7 +1805,7 @@
                 <div v-if="wMaxHP[selectItem.ItemId] && selectItem.Data && selectItem.Data.split('_') && selectItem.Data.split('_').length > 1 && selectItem.Data.split('_')[1] !== undefined" class="box-item-weapon__element">
                     <div>{{translateText('player1', 'Состояние')}}</div>
                     <div class="weapon__progress">
-                        <div class="weapon__progress-line" :style="{width: `${Math.floor((selectItem.Data.split("_")[1] / wMaxHP[selectItem.ItemId]) * 100)}%`}"></div>
+                        <div class="weapon__progress-line" :style="{width: `${Math.floor((selectItem.Data.split('_')[1] / wMaxHP[selectItem.ItemId]) * 100)}%`}"></div>
                     </div>
                 </div>
                 <div class="box-item-weapon__element">
@@ -1859,7 +1859,7 @@
         <span class="inventoryicons-near inventoryicon-use"></span>
         {{translateText('player1', 'поставить')}}
       </div>
-      <div v-if="OtherInfo.Id !== otherType.Tent && (OtherInfo.Id > otherType.None || (maxSlotBackpack > 0 && ItemsData["backpack"].length) || tradeInfo.Active === true) && selectItem.arrayName !== `fastSlots` && selectItem.arrayName !== `accessories`" class="item" @click="onTransfer">
+      <div v-if="OtherInfo.Id !== otherType.Tent && (OtherInfo.Id > otherType.None || (maxSlotBackpack > 0 && ItemsData['backpack'].length) || tradeInfo.Active === true) && selectItem.arrayName !== `fastSlots` && selectItem.arrayName !== `accessories`" class="item" @click="onTransfer">
         <span class="inventoryicons-hand inventoryicon-use"></span>
         {{(selectItem.arrayName === 'other' || selectItem.arrayName === 'backpack' || selectItem.arrayName === 'trade') ? translateText('player1', 'взять') : translateText('player1', 'передать')}}
       </div>
@@ -1867,10 +1867,10 @@
         <span class="inventoryicons-shop-cart inventoryicon-use"></span>
         {{translateText('player1', 'продать')}}
       </div>
-      <div v-if="selectItem.Count > 1 && selectItem.arrayName !== 'fastSlots'" class="item" @click={e => {
+      <div v-if="selectItem.Count > 1 && selectItem.arrayName !== 'fastSlots'" class="item" @click="e => {
           ItemStack = 0;
           rangeslidercreate(selectItem.Count - 1);
-      }}>
+      }">
         <span class="inventoryicons-razdel inventoryicon-use"></span>
         {{translateText('player1', 'разделить')}}
       </div>
@@ -1882,14 +1882,14 @@
   </div>
   <div v-else-if="selectItem.use === stageItem.useItem && ItemStack !== -1" ref="boxPopup" class="box-stack" 
       :style="{top: `${fixOutToY($coords.y, boxPopup.value)}px`, left: `${fixOutToX($coords.x, boxPopup.value)}px`}"
-      @mouseenter={e => useInventoryArea = true} @mouseleave={e => useInventoryArea = false}>
+      @mouseenter="e => useInventoryArea = true" @mouseleave="e => useInventoryArea = false">
       <div class="box-text">
           <span class='icon inv-slap'></span>
           {{translateText('player1', 'Разделение предмета')}}
       </div>
       <div class="box-number">
           {{translateText('player1', 'Кол-во')}}:
-          <input type="number" ref="StackValue" class="box-number-input" @input={event => handleInputStackChange(event.target.value)} @onBlur="onBlurStack" />
+          <input type="number" ref="StackValue" class="box-number-input" @input="event => handleInputStackChange(event.target.value)" @onBlur="onBlurStack" />
       </div>
       <div v-if="selectItem.Count > 2" class="slider box-slider">
           <input type="range" id="stack" />
@@ -1898,7 +1898,7 @@
           <div class="btn-slap" @click={onStack}>
             {{!ItemStack ? translateText('player1', 'Разделить') : ItemStack == 1 ? translateText('player1', 'Выбросить') : translateText('player1', 'Передать')}}
           </div>
-          <div class="box-cancel" @click={e => ItemStack = -1}>
+          <div class="box-cancel" @click="e => ItemStack = -1">
             {{translateText('player1', 'Отмена')}}
           </div>
       </div>
@@ -1910,7 +1910,7 @@
   <div class="box-between">
       <div class="box-width-457 accessories box-column" :style="{position: `${moveBlock['accessories'][0] === null ? 'unset' : 'unset'}`}">
           <div class="battlepaass__box" @click={onOpenBattlePass}>Нажмите, чтобы открыть зимний пропуск</div>
-          <div class="box-accessories" :style="{top: `${moveBlock['accessories'][0]}px`, left: `${moveBlock['accessories'][1]}px`}" @mousedown={event => handleMouseDownBlock(event, "box-accessories", "accessories")} @mouseup={setAccessories} @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+          <div class="box-accessories" :style="{top: `${moveBlock['accessories'][0]}px`, left: `${moveBlock['accessories'][1]}px`}" @mousedown="event => handleMouseDownBlock(event, 'box-accessories', 'accessories')" @mouseup="setAccessories" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
               <div :class="`skin ${(Bool($charGender) || 'women')}`"></div>
               <div class="inventory__accessories">
                   <div class="box-column">
@@ -1923,31 +1923,31 @@
                         :iconInfo="window.getItem(ItemsData['accessories'][clothes.Masks.slotId].ItemId)"
                         :defaultIcon="clothes.Masks.icon"
                         :defaultName="translateText('player1', 'маска')"
-                        @mousedown={event => handleMouseDown(event, clothes.Masks.slotId, 'accessories')}
-                        @mouseup={handleSlotMouseUp}
-                        @mouseenter={event => handleSlotMouseEnter(event, clothes.Masks.slotId, 'accessories')}
-                        @mouseleave={handleSlotMouseLeave}
-                      >
+                        @mousedown="event => handleMouseDown(event, clothes.Masks.slotId, 'accessories')"
+                        @mouseup="handleSlotMouseUp"
+                        @mouseenter="event => handleSlotMouseEnter(event, clothes.Masks.slotId, 'accessories')"
+                        @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Armors.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Armors.slotId].ItemId)"
                           :defaultIcon="clothes.Armors.icon"
                           :defaultName="translateText('player1', 'бронежилет')"
-                          @mousedown={event => handleMouseDown(event, clothes.Armors.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Armors.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Armors.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Armors.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Bags.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Bags.slotId].ItemId)"
                           :defaultIcon="clothes.Bags.icon"
                           :defaultName="translateText('player1', 'рюкзак')"
-                          @mousedown={event => handleMouseDown(event, clothes.Bags.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Bags.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Bags.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Bags.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                   </div>
                   <div class="inventory__accessories_lines"></div>
                     
@@ -1957,113 +1957,113 @@
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Ears.slotId].ItemId)"
                           :defaultIcon="clothes.Ears.icon"
                           :defaultName="translateText('player1', 'уши')"
-                          @mousedown={event => handleMouseDown(event, clothes.Ears.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Ears.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >  
+                          @mousedown="event => handleMouseDown(event, clothes.Ears.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Ears.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>  
                       <Slot
                           :item="ItemsData['accessories'][clothes.Hats.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Hats.slotId].ItemId)"
                           :defaultIcon="clothes.Hats.icon"
                           :defaultName="translateText('player1', 'шапка')"
-                          @mousedown={event => handleMouseDown(event, clothes.Hats.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Hats.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Hats.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Hats.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
     
                       <Slot
                           :item="ItemsData['accessories'][clothes.Glasses.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Glasses.slotId].ItemId)"
                           :defaultIcon="clothes.Glasses.icon"
                           :defaultName="translateText('player1', 'очки')"
-                          @mousedown={event => handleMouseDown(event, clothes.Glasses.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Glasses.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Glasses.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Glasses.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Accessories.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Accessories.slotId].ItemId)"
                           :defaultIcon="clothes.Accessories.icon"
                           :defaultName="translateText('player1', 'шея')"
-                          @mousedown={event => handleMouseDown(event, clothes.Accessories.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Accessories.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Accessories.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Accessories.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Undershirts.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Undershirts.slotId].ItemId)"                            
                           :defaultIcon="clothes.Undershirts.icon"
                           :defaultName="translateText('player1', 'футболка')"
-                          @mousedown={event => handleMouseDown(event, clothes.Undershirts.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Undershirts.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Undershirts.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Undershirts.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Tops.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Tops.slotId].ItemId)"
                           :defaultIcon="clothes.Tops.icon"
                           :defaultName="translateText('player1', 'верх')"
-                          @mousedown={event => handleMouseDown(event, clothes.Tops.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Tops.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Tops.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Tops.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Watches.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Watches.slotId].ItemId)"
                           :defaultIcon="clothes.Watches.icon"
                           :defaultName="translateText('player1', 'часы')"
-                          @mousedown={event => handleMouseDown(event, clothes.Watches.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Watches.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Watches.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Watches.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Legs.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Legs.slotId].ItemId)"
                           :defaultIcon="clothes.Legs.icon"
                           :defaultName="translateText('player1', 'штаны')"
-                          @mousedown={event => handleMouseDown(event, clothes.Legs.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Legs.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Legs.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Legs.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Bracelets.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Bracelets.slotId].ItemId)"
                           :defaultIcon="clothes.Bracelets.icon"
                           :defaultName="translateText('player1', 'браслет')"
-                          @mousedown={event => handleMouseDown(event, clothes.Bracelets.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Bracelets.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Bracelets.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Bracelets.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
 
                       <Slot
                           :item="ItemsData['accessories'][clothes.Torsos.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Torsos.slotId].ItemId)"
                           :defaultIcon="'inv-item-hand-right'"
                           :defaultName="translateText('player1', 'перчатки')"
-                          @mousedown={event => handleMouseDown(event, clothes.Torsos.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Torsos.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Torsos.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Torsos.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                       <Slot
                           :item="ItemsData['accessories'][clothes.Shoes.slotId]"
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Shoes.slotId].ItemId)"
                           :defaultIcon="clothes.Shoes.icon"
                           :defaultName="translateText('player1', 'обувь')"
-                          @mousedown={event => handleMouseDown(event, clothes.Shoes.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Shoes.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Shoes.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Shoes.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                   </div>
                   <div class="inventory__accessories_line"></div>
                   <div class="box-center">  
@@ -2072,32 +2072,31 @@
                           :iconInfo="window.getItem(ItemsData['accessories'][clothes.Suit.slotId].ItemId)"
                           :defaultIcon="clothes.Suit.icon"
                           :defaultName="translateText('player1', 'украшения')"
-                          @mousedown={event => handleMouseDown(event, clothes.Suit.slotId, 'accessories')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, clothes.Suit.slotId, 'accessories')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, clothes.Suit.slotId, 'accessories')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, clothes.Suit.slotId, 'accessories')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                   </div>
               </div>
           </div>
       </div>
       <div class="e-player">
-          <div class="box-absolute-player" :style="{position: 'absolute', top: `${moveBlock["inventory"][0]}px`, left: `${moveBlock["inventory"][1]}px`}" @mousedown={event => handleMouseDownBlock(event, "box-absolute-player", "inventory")}>
+          <div class="box-absolute-player" :style="{position: 'absolute', top: `${moveBlock['inventory'][0]}px`, left: `${moveBlock['inventory'][1]}px`}" @mousedown="event => handleMouseDownBlock(event, 'box-absolute-player', 'inventory')">
               <div class="box-column" :style="{opacity: `${invOpacity}`}">
                   <div class="inventory__title">{{translateText('player1', 'Инвентарь')}}</div>
                   <div class="inventory__text"><span class="inventoryicons-user inventory__icon"></span>{{translateText('player1', 'Предметы, которые находятся у персонажа')}}</div>
               </div>
-              <div class="box-player" :style="{opacity: `${invOpacity}`}" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
-                  <template v-for="(item, index) in ItemsData['inventory']">
+              <div class="box-player" :style="{opacity: `${invOpacity}`}" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
+                  <template v-for="(item, index) in ItemsData['inventory']" :key="index">
                       <Slot
-                          :key="index"
                           :item="item"
                           :iconInfo="window.getItem(item.ItemId)"
-                          @mousedown={event => handleMouseDown(event, index, 'inventory')}
-                          @mouseup={handleSlotMouseUp}
-                          @mouseenter={event => handleSlotMouseEnter(event, index, 'inventory')}
-                          @mouseleave={handleSlotMouseLeave}
-                      >
+                          @mousedown="event => handleMouseDown(event, index, 'inventory')"
+                          @mouseup="handleSlotMouseUp"
+                          @mouseenter="event => handleSlotMouseEnter(event, index, 'inventory')"
+                          @mouseleave="handleSlotMouseLeave"
+                      ></Slot>
                   </template>
               </div>
               <div v-if="maxSlotBackpack > 0 && ItemsData['backpack'].length && ItemsData['backpack'][0] !== undefined && ItemsData['backpack'][0].use !== undefined" :style="{opacity: `${invOpacity}`}">
@@ -2108,18 +2107,17 @@
                           {{translateText('player1', 'Переносное хранилище предметов')}}
                       </div>
                   </div>
-                  <div class="box-other box-between inventory__box_backpack" :style="{opacity: `${!ItemsData['backpack'][0].use ? '0.5' : 1}`}" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                  <div class="box-other box-between inventory__box_backpack" :style="{opacity: `${!ItemsData['backpack'][0].use ? '0.5' : 1}`}" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                       <div class="box-list backpack">
-                      <template v-for="(item, index) in ItemsData['backpack']">
+                      <template v-for="(item, index) in ItemsData['backpack']" :key="index">
                           <Slot
-                              :key="index"
                               :item="item"
                               :iconInfo="window.getItem(item.ItemId)"
-                              @mousedown={event => handleMouseDown(event, index, 'backpack')}
-                              @mouseup={handleSlotMouseUp}
-                              @mouseenter={event => handleSlotMouseEnter(event, index, 'backpack')}
-                              @mouseleave={handleSlotMouseLeave}
-                          >
+                              @mousedown="event => handleMouseDown(event, index, 'backpack')"
+                              @mouseup="handleSlotMouseUp"
+                              @mouseenter="event => handleSlotMouseEnter(event, index, 'backpack')"
+                              @mouseleave="handleSlotMouseLeave"
+                          ></Slot>
                       </template>
                   </div>
                 </div>
@@ -2128,7 +2126,7 @@
         </div>
         <div v-if="tradeInfo.Active === false" class="box-width-457 box-other-main">
             <div class="other">
-                <div v-if="OtherInfo.Id > otherType.None" class="box-other" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                <div v-if="OtherInfo.Id > otherType.None" class="box-other" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                     <div class="box-between height-box">
                         <div class="box-column height-box">
                             <div class="inventory__title">{{otherName[OtherInfo.Id].name}}</div>
@@ -2139,16 +2137,15 @@
                         </div>
                     </div>
                     <div class="box-list">
-                        <template v-for="(item, index) in ItemsData["other"]">
+                        <template v-for="(item, index) in ItemsData['other']" :key="index">
                             <Slot
-                                :key="index"
                                 :item="item"
                                 :iconInfo="window.getItem(item.ItemId)"
-                                @mousedown={event => handleMouseDown(event, index, 'other')}
-                                @mouseup={handleSlotMouseUp}
-                                @mouseenter={event => handleSlotMouseEnter(event, index, 'other')}
-                                @mouseleave={handleSlotMouseLeave}
-                            >
+                                @mousedown="event => handleMouseDown(event, index, 'other')"
+                                @mouseup="handleSlotMouseUp"
+                                @mouseenter="event => handleSlotMouseEnter(event, index, 'other')"
+                                @mouseleave="handleSlotMouseLeave"
+                            ></Slot>
                         </template>
                     </div>
                 </div>
@@ -2156,7 +2153,7 @@
         </div>
         <div v-else class="box-width-457 box-other-trade">
             <div class="box-width-356 trade">
-                <div class="box-between" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                <div class="box-between" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                     <div class="box-column">
                         <div class="inventory__title">{{translateText('player1', 'Обмен с')}} {{tradeInfo.WithName}}</div>
                         <div class="inventory__text">
@@ -2174,27 +2171,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-trade" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
-                    <template v-for="(item, index) in ItemsData['trade']">
+                <div class="box-trade" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
+                    <template v-for="(item, index) in ItemsData['trade']" :key="index">
                         <Slot
-                            :key="index"
                             :item="item"
                             :iconInfo="window.getItem(item.ItemId)"
-                            @mousedown={event => handleMouseDown(event, index, 'trade')}
-                            @mouseup={handleSlotMouseUp}
-                            @mouseenter={event => handleSlotMouseEnter(event, index, 'trade')}
-                            @mouseleave={handleSlotMouseLeave}
-                        >
+                            @mousedown="event => handleMouseDown(event, index, 'trade')"
+                            @mouseup="handleSlotMouseUp"
+                            @mouseenter="event => handleSlotMouseEnter(event, index, 'trade')"
+                            @mouseleave="handleSlotMouseLeave"
+                        ></Slot>
                     </template>
                 </div>
-                <div class="box-input margin-top-8" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                <div class="box-input margin-top-8" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                     
-                    <input type="number" ref="tradeInfo.YourMoney" class="input" @input={event => handleInputChange('YourMoney', event.target.value)} @onBlur={onBlur} placeholder="Сумма для перевода" :disabled="!(!tradeInfo.YourStatusChange && !tradeInfo.YourStatus)" />
+                    <input type="number" ref="tradeInfo.YourMoney" class="input" @input="event => handleInputChange('YourMoney', event.target.value)" @onBlur="onBlur" placeholder="Сумма для перевода" :disabled="!(!tradeInfo.YourStatusChange && !tradeInfo.YourStatus)" />
                     <div class="box-icon">
                         <span class="icon-dollar"></span>
                     </div>
                 </div>
-                <div class="box-between" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                <div class="box-between" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                     <div class="box-column">
                         <div class="inventory__title">{{translateText('player1', 'Предметы')}} {{tradeInfo.WithName}}</div>
                         <div class="inventory__text"><span :class="`trade-square ${tradeInfo.WithStatus ? 'active' : ''}`">{{!tradeInfo.WithStatus ? '&#10006;' : '&#10003;'}}</span>{{!tradeInfo.WithStatus ? translateText('player1', 'Не готов к обмену') : translateText('player1', 'Готов к обмену')}}</div>
@@ -2207,48 +2203,46 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-trade margin-top-8" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
-                    <template v-for="(item, index) in ItemsData['with_trade']">
+                <div class="box-trade margin-top-8" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
+                    <template v-for="(item, index) in ItemsData['with_trade']" :key="index">
                         <Slot
-                            :key="index"
                             :item="item"
                             :iconInfo="window.getItem(item.ItemId)"
-                            @mouseenter={event => handleSlotMouseEnter(event, index, 'with_trade')}
-                            @mouseleave={handleSlotMouseLeave}
-                        >
+                            @mouseenter="event => handleSlotMouseEnter(event, index, 'with_trade')"
+                            @mouseleave="handleSlotMouseLeave"
+                        ></Slot>
                     </template>
                 </div>
-                <div class="box-input margin-top-8" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+                <div class="box-input margin-top-8" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
                     <input type="number" :value="tradeInfo.WithMoney" class="input" placeholder="0" disabled />
                     <div class="box-icon">
                         <span class="icon-dollar"></span>
                     </div>
                 </div>
-                <div v-if="tradeInfo.Active" class="btn-box-trade" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
-                    <div v-if="tradeInfo.YourStatus === true && tradeInfo.WithStatus === true" class="btn-trade" :style="{opacity: `${tradeInfo.YourStatusChange ? '0.5' : '1'}`}" @click={TradeSelect}>{{translateText('player1', 'Подтвердить')}}</div>
-                    <div v-else class="btn-trade" :style="{opacity: `${tradeInfo.YourStatus ? '0.5' : '1'}`}" @click={TradeSelect}>{{translateText('player1', 'Готов')}}</div>
-                    <div class="btn-trade red" :style="{opacity: `${!tradeInfo.YourStatusChange && !tradeInfo.YourStatus ? '0.5' : '1'}`}" @click={TradeCancel}>{{translateText('player1', 'Отменить')}}</div>
+                <div v-if="tradeInfo.Active" class="btn-box-trade" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
+                    <div v-if="tradeInfo.YourStatus === true && tradeInfo.WithStatus === true" class="btn-trade" :style="{opacity: `${tradeInfo.YourStatusChange ? '0.5' : '1'}`}" @click="TradeSelect">{{translateText('player1', 'Подтвердить')}}</div>
+                    <div v-else class="btn-trade" :style="{opacity: `${tradeInfo.YourStatus ? '0.5' : '1'}`}" @click="TradeSelect">{{translateText('player1', 'Готов')}}</div>
+                    <div class="btn-trade red" :style="{opacity: `${!tradeInfo.YourStatusChange && !tradeInfo.YourStatus ? '0.5' : '1'}`}" @click="TradeCancel">{{translateText('player1', 'Отменить')}}</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="box-footer">
         <div class="box-width-457"></div>
-        <div class="box-width-617" :style="{opacity: `${invOpacity}`}" @mouseenter={e => mainInventoryArea = true} @mouseleave={e => mainInventoryArea = false}>
+        <div class="box-width-617" :style="{opacity: `${invOpacity}`}" @mouseenter="e => mainInventoryArea = true" @mouseleave="e => mainInventoryArea = false">
             <div class="box-quickuse">
-                <div v-for="(item, index) in ItemsData['fastSlots']" class="fastslots">
+                <div v-for="(item, index) in ItemsData['fastSlots']" class="fastslots" :key="index">
                     <div v-if="index !== -1" class="id">{{index+1}}</div>
                     <Slot
-                        :key="index"
                         :index="fastSlots[index]"
                         :item="item"
                         :iconInfo="window.getItem(item.ItemId)"
                         :defaultStyle="smoll"
-                        @mousedown={event => handleMouseDown(event, index, 'fastSlots')}
-                        @mouseup={handleSlotMouseUp}
-                        @mouseenter={event => handleSlotMouseEnter(event, index, 'fastSlots')}
-                        @mouseleave={handleSlotMouseLeave}
-                    >
+                        @mousedown="event => handleMouseDown(event, index, 'fastSlots')"
+                        @mouseup="handleSlotMouseUp"
+                        @mouseenter="event => handleSlotMouseEnter(event, index, 'fastSlots')"
+                        @mouseleave="handleSlotMouseLeave"
+                    ></Slot>
                 </div>
             </div>
         </div>
@@ -2257,7 +2251,6 @@
             
         </div>
     </div>
-</div>
 </template>
 
 <style scoped>
