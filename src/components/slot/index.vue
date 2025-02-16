@@ -2,7 +2,11 @@
     import { ItemType, itemsInfo, ItemId } from './json/itemsinfo'
     import { getPng } from './getPng.js'
 
-    let item;
+    const props = defineProps({
+        item
+    })
+
+    let item = props.item;
     let defaultIcon;
     let defaultName;
     let defaultStyle;

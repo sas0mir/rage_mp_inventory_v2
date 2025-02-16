@@ -1,8 +1,6 @@
 <script setup>
   import { ref, onMounted, onUnmounted } from 'vue';
-  import { translateText } from './lang';
   import { executeClient } from './api/rage';
-  import { format } from './api/formatter'
   import { ItemType, ItemId, itemsInfo } from './json/itemsinfo';
   import { clothesData, ItemToWeaponHash, WeaponHashToItem, stageItem, clearSlot, defaulSelectItem, defaulHoverItem, maxSlots, otherName, otherType, clothes, clothesId, clothesName, itemIdCaseToId } from './functions.js';
   import wComponents from './wComponents.js';
