@@ -1,28 +1,23 @@
 <script setup lang="js">
+    import { useItemsStore } from '@/store/items_store';
 
-    import Slot from '../slot/index.vue'
-    const props = defineProps({
-        player,
-        accesories,
-        clothes_head,
-        clothes_vest,
-        clothes_other,
-        clothes_shirt,
-        clothes_pants,
-        clothes_shoes,
-    })
+    const props = defineProps([''])
+    const itemsStore = useItemsStore();
+    const {
+        getAround,
+        getBackpack,
+        getEquipped,
+        getAccesories,
+        getWeapons,
+        setItem
+    } = itemsStore;
 
-    const head = props.clothes_head;
-    const vest = props.clothes_vest;
-    const other = props.clothes_other;
-    const shirt = props.clothes_shirt;
-    const pants = props.clothes_pants;
-    const shoes = props.clothes_shoes;
+    const { head, vest, other, shirt, pants, shoes } = getEquipped;
 </script>
 
 <template>
     <section class="equipment_container">
-        <h3 v-if="player.name" class="ec_header">{{ player.name }}</h3>
+        <!-- <h3 v-if="player.name" class="ec_header">{{ player.name }}</h3> -->
         <div class="ec_clothes_container">
             <div class="ec_clothes_column">
                 <Slot :item="head"></Slot>

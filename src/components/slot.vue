@@ -1,17 +1,14 @@
 <script setup lang="js">
-    import { ItemType, itemsInfo, ItemId } from './json/itemsinfo'
-    import { getPng } from './getPng.js'
 
-    const props = defineProps({
-        item
-    })
+    const props = defineProps([
+        'item'
+    ])
 
     let item = props.item;
     let defaultIcon;
     let defaultName;
     let defaultStyle;
 
-    let iconInfo = itemsInfo[item.ItemId];
         
     const Bool = (text) => {
         return String(text).toLowerCase() === "true";

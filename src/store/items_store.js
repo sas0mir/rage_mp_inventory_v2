@@ -18,15 +18,19 @@ export const useItemsStore = defineStore('items', {
         getAround: (state) => state.around,
         getBackpack: (state) => state.backpack,
         getEquipped: (state) => {
-            state.clothes_head,
-            state.clothes_vest,
-            state.clothes_other,
-            state.clothes_shirt,
-            state.clothes_pants,
-            state.clothes_shoes
+            return {
+                head: state.clothes_head,
+                vest: state.clothes_vest,
+                other: state.clothes_other,
+                shirt: state.clothes_shirt,
+                pants: state.clothes_pants,
+                shoes: state.clothes_shoes
+            }
         },
         getAccesories: (state) => state.accesories,
-        getWeapons: (state) => { state.weapon_first. state.weapon_second }
+        getWeapons: (state) => {
+            return {weaponFirst: state.weapon_first, weaponSecond: state.weapon_second}
+        }
     },
     actions: {
         setState(slot, item, index) {
