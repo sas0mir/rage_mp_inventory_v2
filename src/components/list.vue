@@ -21,21 +21,13 @@
 </template>
 
 <style>
-    .weapon_container {
+    .list_container {
         position: relative;
         display: block;
-        width: 40%;
+        width: 20%;
         height: 100%;
         padding: 0;
         margin: 0;
-    }
-    .wc_header {
-        display: flex;
-        justify-content: space-between;
-    }
-    .wc_image {
-        height: 100%;
-        aspect-ratio: 1/1;
-        /* object-fit: contain; */
+        background-color: rgba(0, 0, 0, 0.75);
     }
 </style>

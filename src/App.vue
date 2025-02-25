@@ -14,30 +14,28 @@
     getWeapons,
     setItem
   } = itemsStore;
-  console.log('GETWS->', getWeapons);
   const { weaponFirst, weaponSecond } = getWeapons;
 
   onMounted(() => {
-    console.log('MOUNT->');
       // Инициализация инвентаря игрока
-      window.events.addEvent("cef.inventory.InitData", InitData);
-      window.events.addEvent("cef.inventory.InitMyData", InitMyData);
-      window.events.addEvent("cef.inventory.UpdateSpecialVars", UpdateSpecialVars);
+    //   window.events.addEvent("cef.inventory.InitData", InitData);
+    //   window.events.addEvent("cef.inventory.InitMyData", InitMyData);
+    //   window.events.addEvent("cef.inventory.UpdateSpecialVars", UpdateSpecialVars);
       // Инициализация инвентаря при взаимодействии с чем то
-      window.events.addEvent("cef.inventory.InitOtherData", InitOtherData);
+      //window.events.addEvent("cef.inventory.InitOtherData", InitOtherData);
       // Инициализация инвентаря при трейде
-      window.events.addEvent("cef.inventory.InitTradeData", InitTradeData);
+      //window.events.addEvent("cef.inventory.InitTradeData", InitTradeData);
       // Обновление слота в любом ивентаре
-      window.events.addEvent("cef.inventory.UpdateSlot", UpdateSlot);
+      //window.events.addEvent("cef.inventory.UpdateSlot", UpdateSlot);
       // Инициализация инвентаря игрока
-      window.events.addEvent("cef.inventory.TradeUpdate", TradeUpdate);
+      //window.events.addEvent("cef.inventory.TradeUpdate", TradeUpdate);
       // Инициализация инвентаря игрока
-      window.events.addEvent("cef.inventory.tradeMoney", handleInputChange);
+      //window.events.addEvent("cef.inventory.tradeMoney", handleInputChange);
       // Обновление информации о бучтрых слотах
-      window.events.addEvent("cef.inventory.fastSlots", FastSlots);
+      //window.events.addEvent("cef.inventory.fastSlots", FastSlots);
       // Закрытие инвентаря
-      window.events.addEvent("cef.inventory.Close", Close);
-      window.events.addEvent("cef.inventory.SlotToPrice", InitSlotToPrice);
+      //window.events.addEvent("cef.inventory.Close", Close);
+      //window.events.addEvent("cef.inventory.SlotToPrice", InitSlotToPrice);
       window.addEventListener('mousemove', handleGlobalMouseMove);
       window.addEventListener('mouseup', handleGlobalMouseUp);
       window.addEventListener('mousedown', handleGlobalMouseDown);
@@ -47,26 +45,26 @@
 
   onUnmounted(() => {
       // Инициализация инвентаря игрока
-      window.events.removeEvent("cef.inventory.InitData", InitData);
-      window.events.removeEvent("cef.inventory.InitMyData", InitMyData);
-      window.events.removeEvent("cef.inventory.UpdateSpecialVars", UpdateSpecialVars);
+    //   window.events.removeEvent("cef.inventory.InitData", InitData);
+    //   window.events.removeEvent("cef.inventory.InitMyData", InitMyData);
+    //   window.events.removeEvent("cef.inventory.UpdateSpecialVars", UpdateSpecialVars);
       // Инициализация инвентаря при взаимодействии с чем то
-      window.events.removeEvent("cef.inventory.InitOtherData", InitOtherData);
+      //window.events.removeEvent("cef.inventory.InitOtherData", InitOtherData);
       // Инициализация инвентаря при трейде
-      window.events.removeEvent("cef.inventory.InitTradeData", InitTradeData);
+      //window.events.removeEvent("cef.inventory.InitTradeData", InitTradeData);
       // Обновление слота в любом ивентаре
-      window.events.removeEvent("cef.inventory.UpdateSlot", UpdateSlot);
+      //window.events.removeEvent("cef.inventory.UpdateSlot", UpdateSlot);
       // Обновление информации о items
-      window.events.removeEvent("cef.inventory.Init", Init);
+      //window.events.removeEvent("cef.inventory.Init", Init);
       // Инициализация инвентаря игрока
-      window.events.removeEvent("cef.inventory.TradeUpdate", TradeUpdate);
+      //window.events.removeEvent("cef.inventory.TradeUpdate", TradeUpdate);
       // Инициализация инвентаря игрока
-      window.events.removeEvent("cef.inventory.tradeMoney", handleInputChange);
+      //window.events.removeEvent("cef.inventory.tradeMoney", handleInputChange);
       // Обновление информации о бучтрых слотах
-      window.events.removeEvent("cef.inventory.fastSlots", FastSlots);
+      //window.events.removeEvent("cef.inventory.fastSlots", FastSlots);
       // Закрытие инвентаря
-      window.events.removeEvent("cef.inventory.Close", Close);
-      window.events.removeEvent("cef.inventory.SlotToPrice", InitSlotToPrice);
+      //window.events.removeEvent("cef.inventory.Close", Close);
+      //window.events.removeEvent("cef.inventory.SlotToPrice", InitSlotToPrice);
       window.removeEventListener('mousemove', handleGlobalMouseMove);
       window.removeEventListener('mouseup', handleGlobalMouseUp);
       window.removeEventListener('mousedown', handleGlobalMouseDown);
@@ -498,9 +496,9 @@
             <weapon-slot :position="second" :item="weaponSecond"></weapon-slot>
         </div>
         <div class="ic_content">
-            <list></list>
+            <list :position="around"></list>
             <equipment></equipment>
-            <list></list>
+            <list :position="backpack"></list>
         </div>
     </div>
 </template>
@@ -510,10 +508,26 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        width: 70%;
-        height: 70%;
+        justify-content: space-between;
+        width: 65vw;
+        aspect-ratio: 4/3;
+        /* height: 70vh; */
         margin: 0 auto;
         align-self: center;
+    }
+    .ic_weapons {
+        position: relative;
+        width: 100%;
+        height: 12%;
+        display: flex;
+        justify-content: space-around;
+    }
+    .ic_content {
+        position: relative;
+        width: 100%;
+        height: 80%;
+        display: flex;
+        justify-content: space-between;
     }
 
 @media (min-width: 1024px) {
