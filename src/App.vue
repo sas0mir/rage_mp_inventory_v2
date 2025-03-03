@@ -4,6 +4,7 @@
   import { ItemType, ItemId, itemsInfo } from './json/itemsinfo';
   import inventoryweapons from './json/inventoryweapons';
   import { useItemsStore } from './store/items_store';
+  import testData from './json/testData.json'
 
   const itemsStore = useItemsStore();
   const {
@@ -17,6 +18,7 @@
   const { weaponFirst, weaponSecond } = getWeapons;
 
   onMounted(() => {
+    console.log('TEST->', testData);
       // Инициализация инвентаря игрока
     //   window.events.addEvent("cef.inventory.InitData", InitData);
     //   window.events.addEvent("cef.inventory.InitMyData", InitMyData);
